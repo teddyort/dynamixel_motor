@@ -90,7 +90,8 @@ class JointTorqueController(JointController):
         self.VELOCITY_PER_TICK = rospy.get_param('dynamixel/%s/%d/radians_second_per_encoder_tick' % (self.port_namespace, self.motor_id))
         self.MAX_VELOCITY = rospy.get_param('dynamixel/%s/%d/max_velocity' % (self.port_namespace, self.motor_id))
         self.MIN_VELOCITY = self.VELOCITY_PER_TICK
-        
+        self.TORQUE_PER_TICK = rospy.get_param('dynamixel/%s/%d/torque_per_tick' % (self.port_namespace, self.motor_id))
+
         if self.compliance_slope is not None: self.set_compliance_slope(self.compliance_slope)
         if self.compliance_margin is not None: self.set_compliance_margin(self.compliance_margin)
         if self.compliance_punch is not None: self.set_compliance_punch(self.compliance_punch)
@@ -114,6 +115,10 @@ class JointTorqueController(JointController):
         self.last_commanded_torque = spd_rad
         return int(round(spd_rad / self.VELOCITY_PER_TICK))
 
+    def torque_nm_to_raw(self, t_nm):
+        self.last_commanded_torque = t_nm
+        return int(round(t_nm / self.TORQUE_PER_TICK))
+
     def set_torque_enable(self, torque_enable):
         mcv = (self.motor_id, torque_enable)
         self.dxl_io.set_multi_torque_enabled([mcv])
@@ -121,6 +126,11 @@ class JointTorqueController(JointController):
     def set_speed(self, speed):
         mcv = (self.motor_id, self.spd_rad_to_raw(speed))
         self.dxl_io.set_multi_speed([mcv])
+
+    def set_goal_torque(self,torque):
+        raw_torque = self.torque_nm_to_raw(torque)
+        print raw_torque
+        self.dxl_io.set_goal_torque(self.motor_id, raw_torque)
 
     def set_compliance_slope(self, slope):
         if slope < DXL_MIN_COMPLIANCE_SLOPE: slope = DXL_MIN_COMPLIANCE_SLOPE
@@ -166,5 +176,5 @@ class JointTorqueController(JointController):
                 self.joint_state_pub.publish(self.joint_state)
 
     def process_command(self, msg):
-        self.set_speed(msg.data)
+        self.set_goal_torque(msg.data)
 

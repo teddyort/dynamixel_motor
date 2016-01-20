@@ -263,6 +263,7 @@ DXL_MODEL_TO_PARAMS = \
            'encoder_resolution': 4096,
            'range_degrees':      360.0,
            'torque_per_volt':    6.0 / 12.0,                       #  6 NM @ 12V
+           'torque_per_tick':    1.1 * 4.5e-3,                     #  NM/Tick at 12V
            'velocity_per_volt':  (63 * RPM_TO_RADSEC) / 12.0,      #  63 RPM @ 12.0V
            'rpm_per_tick':       0.114,
            'features':           [DXL_CURRENT_L, DXL_TORQUE_CONTROL_MODE, DXL_GOAL_ACCELERATION]
@@ -271,6 +272,7 @@ DXL_MODEL_TO_PARAMS = \
            'encoder_resolution': 4096,
            'range_degrees':      360.0,
            'torque_per_volt':    8.4 / 12.0,                       #  8.4 NM @ 12V
+           'torque_per_tick':    1.4 * 4.5e-3,                     #  NM/Tick at 12V
            'velocity_per_volt':  (45 * RPM_TO_RADSEC) / 12.0,      #  45 RPM @ 12.0V
            'rpm_per_tick':       0.114,
            'features':           [DXL_CURRENT_L, DXL_TORQUE_CONTROL_MODE, DXL_GOAL_ACCELERATION]
