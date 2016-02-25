@@ -129,7 +129,6 @@ class JointTorqueController(JointController):
 
     def set_goal_torque(self,torque):
         raw_torque = self.torque_nm_to_raw(torque)
-        print raw_torque
         self.dxl_io.set_goal_torque(self.motor_id, raw_torque)
 
     def set_compliance_slope(self, slope):
